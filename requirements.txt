@@ -1,0 +1,34 @@
+# pip install -r requirements.txt
+# pip freeze
+# pip uninstall -r requirements.txt
+# pip freeze >> requirements.txt
+
+beautifulsoup4
+bs4
+certifi
+charset-normalizer
+contourpy
+cycler
+et_xmlfile
+fonttools
+html5lib
+idna
+kiwisolver
+lxml
+matplotlib
+numpy
+openpyxl
+packaging
+pandas
+pillow
+pyparsing
+python-dateutil
+pytz
+requests
+six
+soupsieve
+typing_extensions
+tzdata
+urllib3
+webencodings
+xlrd
