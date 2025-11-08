@@ -1,114 +1,54 @@
 import numpy as np
-import math as mt
 from lab1.parsing_data import *
 from lab1.display_data import *
 from lab1.generate_data import *
-
-
-def degree_polynomial_derivatives_scor(SL: np.ndarray, degree, dt: float):
-    degree += 1
-    iter = len(SL)
-    y = np.zeros((degree, iter, 1))
-
-    pascal = np.zeros((degree, degree), dtype=int)
-    for n in range(degree):
-        for k in range(n + 1):
-            if k == 0 or k == n:
-                pascal[n, k] = 1
-            else:
-                pascal[n, k] = pascal[n - 1, k - 1] + pascal[n - 1, k]
-
-    for i in range(iter):
-        for d in range(1, degree):
-            if i < (iter - d):
-                coeffs = pascal[d, :d + 1]
-                terms = [SL[i + j] * coeffs[j] * ((-1) ** (d - j)) for j in range(d + 1)]
-                y[d - 1][i] = sum(terms) / (dt ** d)
-
-
-    mean_array = np.zeros((degree - 1))
-
-    for d in range(degree - 1):
-        mean_array[d] = abs(np.mean(y[d]))
-    m_polinom_mean = np.argmin(mean_array) + 1
-
-
-    scv_y = np.zeros((degree - 1))
-    for d in range(degree - 1):
-        scv_y[d] = mt.sqrt(np.var(y[d]))
-
-
-    var_SL = np.var(SL)
-    scv_y_theor = np.zeros((degree - 1))
-    for d in range(degree - 1):
-        scv_y_theor[d] = mt.sqrt((2 * var_SL) / (dt ** (2 * (d + 1))))
-    
-
-    dalta_array = np.zeros((degree - 1))
-    for d in range(degree - 1):
-        dalta_array[d] = abs(scv_y[d] - scv_y_theor[d])
-    m_polinom = np.argmin(dalta_array) + 1
-
-    # Nicely formatted summary
-    mean_str = np.array2string(mean_array, precision=6, separator=', ')
-    print("\nPolynomial-derivative scoring summary")
-    print("=" * 60)
-    print(f"Mean absolute values by derivative order (d = 1..{len(mean_array)}):")
-    print(f"  {mean_str}")
-    print(f"Minimum mean at derivative order: d = {m_polinom_mean}")
-    print()
-    print("SCV (sqrt(var)) comparison by derivative order:")
-    print("  d   observed         theoretical        |difference|")
-    for d, (obs, theo, diff) in enumerate(zip(scv_y, scv_y_theor, dalta_array), start=1):
-        print(f"  {d:2d}  {obs:15.6e}  {theo:15.6e}  {abs(diff):15.6e}")
-    print()
-    print(f"Optimal polynomial degree (based on SCV difference): {m_polinom}")
-    print("=" * 60)
-
-    return m_polinom, dalta_array
-
-
-def LSM(S0, max_degree: int = 2):
-    iter = len(S0)
-    Yin = np.zeros((iter, 1))
-    F = np.ones((iter, max_degree + 1))
-
-    for i in range(iter):
-        Yin[i, 0] = float(S0[i])
-        for k in range(1, max_degree + 1):
-            F[i, k] = float(i ** k)
-
-    FT = F.T
-    FFT = FT.dot(F)
-    FFTI = np.linalg.inv(FFT)
-    FFTIFT = FFTI.dot(FT)
-    C = FFTIFT.dot(Yin)
-    Yout = F.dot(C)
-
-    coeffs = [float(C[j, 0]) for j in range(C.shape[0])][::-1]
-    terms = []
-    for j, coeff in enumerate(coeffs):
-        if j == 0:
-            terms.append(f"{coeff}")
-        else:
-            terms.append(f"{coeff} * t^{j}")
-    print('Регресійна модель:')
-    print('y(t) = ', ' + '.join(terms))
-    print(coeffs)
-
-    return coeffs, Yout
-
+from lab2.statistical_learning import *
+from lab2.model_determination import *
+from lab2.polynomial_degree import *
+from lab2.anomaly import *
 
 
 
 
 if __name__ == "__main__":
-    arr_real = file_parsing("gdp.xlsx", "Gdp")
+    print("World Population Data Analysis")
+    arr_real = file_parsing("gdp.xlsx", "Gdp", "US")
 
     polynom_degree, dalta_array = degree_polynomial_derivatives_scor(arr_real, 10, 1)
-    display_arr(np.arange(1, len(dalta_array) + 1), dalta_array, "Degree", "Value", "Polynomial Derivatives")
-
     coeffs, Yout = LSM(arr_real, polynom_degree)
+    extrapolated_arr = extrapolation(arr_real, 1, 1.5)
 
-    arr_polynom = generate_polynomial_trend(len(arr_real), coeffs)
-    display_trend(np.arange(len(arr_polynom)), arr_polynom, arr_real, f"Generated Polynomial Trend of {polynom_degree}th degree")
+    r2_score_ts_stat_lern(arr_real, Yout, "LSM Polynomial Trend Fitting for GDP Data")
+    kpi_model(arr_real, Yout)
+
+    display_arr(range(1, len(dalta_array) + 1), dalta_array, "Degree", "Delta SCV", "Delta SCV vs Polynomial Degree for GDP Data")
+    display_trend(np.arange(len(arr_real)), arr_real, generate_polynomial_trend(len(arr_real), coeffs), "GDP Data with Polynomial Trend")
+    display_arrays_comparison(np.arange(len(extrapolated_arr)), extrapolated_arr, np.arange(len(arr_real)), arr_real, "Extrapolated Data", "Real Data", "Comparison of Extrapolated and Real World Population Data")
+    print("---------------------------------------------------")
+    print()
+
+
+    print("Anomaly Detection on Synthetic Data")
+    n = 1000
+    anomaly_rate = 10
+    anomaly_magnitude = 3
+    dsig = 3
+
+    arr_real = generate_quadratic_trend(n)
+    arr_noised = anomaly_creation(arr_real, dsig, anomaly_rate, anomaly_magnitude)
+    arr_clear = sliding_wind_anomaly_detection(arr_noised, 5)
+
+    display_arrays_comparison(np.arange(n), arr_noised, np.arange(n), arr_clear, "Noised Data", "Cleared Data", "Anomaly Detection using Sliding Window for Synthetic Data", arr_real)
+    display_trend(np.arange(n), arr_clear, arr_real, "Noised Data with Cleared Trend")
+    print("---------------------------------------------------")
+    print()
+
+    print("USA Inflation Data Analysis")
+    arr_real = file_parsing("usa_inflation.xlsx", "Inflation")
+    arr_clear = sliding_wind_anomaly_detection(arr_real, 5)
+    polynom_degree, dalta_array = degree_polynomial_derivatives_scor(arr_clear, 9, 1)
+    coeffs, Yout = LSM(arr_clear, polynom_degree)
+    r2_score_ts_stat_lern(arr_clear, Yout, "LSM Polynomial Trend Fitting")
+    kpi_model(arr_clear, Yout)
+    display_arr(range(1, len(dalta_array) + 1), dalta_array, "Degree", "Delta SCV", "Delta SCV vs Polynomial Degree for USA Inflation Data")
+    display_arrays_comparison(np.arange(len(arr_real)), arr_real, np.arange(len(arr_clear)), arr_clear, "Real Data", "Cleared Data", "USA Inflation Data: Real vs Cleared", Yout.flatten())

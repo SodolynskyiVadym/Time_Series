@@ -41,7 +41,6 @@ def display_histogram_exp_error(lambd, errors):
 
 
 def display_trend(x, y, ideal_trend, text):
-    # Plot the observed series y and the ideal trend on the same axes.
     plt.figure()
     plt.plot(x, y, label=text, linewidth=2)
     plt.plot(x, ideal_trend, label="Ideal Trend", linestyle='--', linewidth=2)
@@ -58,6 +57,20 @@ def display_arr(x, y, text_x, text_y, title):
     plt.plot(x, y, label=title, linewidth=2)
     plt.xlabel(text_x)
     plt.ylabel(text_y)
+    plt.title(title)
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+
+
+def display_arrays_comparison(x1, y1, x2, y2, label1, label2, title, y_real = None):
+    plt.figure()
+    plt.plot(x1, y1, label=label1, linewidth=2)
+    plt.plot(x2, y2, label=label2, linewidth=2)
+    if y_real is not None:
+        plt.plot(x1, y_real, label="Real Trend", linestyle='--', linewidth=2)
+    plt.xlabel('Index')
+    plt.ylabel('Value')
     plt.title(title)
     plt.legend()
     plt.grid(True)

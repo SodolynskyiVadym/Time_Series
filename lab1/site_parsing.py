@@ -114,8 +114,3 @@ def fetch_usa_inflation_data_to_excel():
     df.to_excel(f"{folder_path}/usa_inflation.xlsx")
     return
 
-
-fetch_gdp_data_to_excel("FR")
-fetch_earth_population_data_to_excel()
-fetch_usa_inflation_data_to_excel()
-
