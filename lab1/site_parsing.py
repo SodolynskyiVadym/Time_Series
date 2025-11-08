@@ -12,6 +12,8 @@ headers = {
     "Accept-Language": "en-US,en;q=0.9",
 }
 
+folder_path = "lab1"
+
 
 def fetch_gdp_data_to_excel(country_tag):
     url = f"https://api.worldbank.org/v2/country/{country_tag}/indicator/NY.GDP.MKTP.CD?format=json&per_page=100"
@@ -41,7 +43,7 @@ def fetch_gdp_data_to_excel(country_tag):
         raise ValueError("No data found for the specified country tag.")
 
     df = pd.DataFrame(data=gdp_data)
-    df.to_excel("gdp.xlsx")
+    df.to_excel(f"{folder_path}/gdp.xlsx")
     return
 
 
@@ -83,7 +85,7 @@ def fetch_earth_population_data_to_excel():
         })
 
     df = pd.DataFrame(population_data, columns=["Year", "Population"])
-    df.to_excel("world_population.xlsx")
+    df.to_excel(f"{folder_path}/world_population.xlsx")
     return
 
 
@@ -109,7 +111,7 @@ def fetch_usa_inflation_data_to_excel():
             })
 
     df = pd.DataFrame(inflation_data, columns=["Year", "Inflation"])
-    df.to_excel("usa_inflation.xlsx")
+    df.to_excel(f"{folder_path}/usa_inflation.xlsx")
     return
 
 
