@@ -5,11 +5,11 @@ from sklearn.metrics import *
 
 
 # Calculates model evaluation metrics: MAE, MSE, RMSE, and R² score
-def kpi_model(y_test, predicted):
-    mae = mean_absolute_error(y_test, predicted)
-    mse = mean_squared_error(y_test, predicted)
+def kpi_model(y, predicted):
+    mae = mean_absolute_error(y, predicted)
+    mse = mean_squared_error(y, predicted)
     rmse = np.sqrt(mse)
-    r2 = r2_score(y_test, predicted)
+    r2 = r2_score(y, predicted)
 
     print("Model evaluation metrics:")
     print(f"Mean Absolute Error (MAE): {mae}")
@@ -17,7 +17,7 @@ def kpi_model(y_test, predicted):
     print(f"Root Mean Squared Error (RMSE): {rmse}")
     print(f"R-squared (R2) Score: {r2}")
 
-    return
+    return mae, mse, rmse, r2
 
 
 # Computes R² (coefficient of determination) manually from scratch for time series data
