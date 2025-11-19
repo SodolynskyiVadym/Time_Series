@@ -4,14 +4,12 @@ import matplotlib.pyplot as plt
 
 
 def display_statistics(mean, disp, scv):
-    # Nicely print the three statistics to console.
     print(f"Mean: {mean}")
     print(f"Dispersion: {disp}")
     print(f"SCV: {scv}")
 
 
 def display_histogram_norm_error(m, sigma, errors):
-    # Plot a normalized histogram of the errors and overlay the theoretical normal PDF.
     plt.hist(errors, bins=30, density=True, alpha=0.6, color='g')
     xmin, xmax = plt.xlim()
 
@@ -26,7 +24,6 @@ def display_histogram_norm_error(m, sigma, errors):
 
 
 def display_histogram_exp_error(lambd, errors):
-    # Plot a normalized histogram of exponential errors and overlay the theoretical exponential PDF.
     plt.hist(errors, bins=30, density=True, alpha=0.6, color='g')
     xmin, xmax = plt.xlim()
 
@@ -40,10 +37,10 @@ def display_histogram_exp_error(lambd, errors):
 
 
 
-def display_trend(x, y, ideal_trend, text):
+def display_trend(x, y, arr_real, text):
     plt.figure()
     plt.plot(x, y, label=text, linewidth=2)
-    plt.plot(x, ideal_trend, label="Ideal Trend", linestyle='--', linewidth=2)
+    plt.plot(x, arr_real, label="Real Data", linestyle='--', linewidth=2)
     plt.xlabel('Index')
     plt.ylabel('Value')
     plt.title(text)
@@ -52,9 +49,9 @@ def display_trend(x, y, ideal_trend, text):
     plt.show()
 
 
-def display_arr(x, y, text_x, text_y, title):
+def display_arr(y, text_x, text_y, title):
     plt.figure()
-    plt.plot(x, y, label=title, linewidth=2)
+    plt.plot(range(len(y)), y, label=title, linewidth=2)
     plt.xlabel(text_x)
     plt.ylabel(text_y)
     plt.title(title)

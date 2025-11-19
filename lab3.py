@@ -18,7 +18,7 @@ if __name__ == "__main__":
     mode = int(input("Select data for Kalman filter"))
     if mode == 1:
         arr_real = generate_quadratic_trend(n)
-        arr_noise = generate_norm_error(0, 2.5, n)
+        arr_noise = generate_norm_error(n, 0, 2.5)
         arr_real = arr_real + arr_noise
     elif mode == 2:
         arr_real = file_parsing("gdp.xlsx", "Gdp", "BR")

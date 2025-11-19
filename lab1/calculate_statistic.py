@@ -2,7 +2,6 @@ import numpy as np
 
 
 def calculate_statistics(values):
-    # Compute basic statistics for a 1-D array-like: mean, variance, and standard deviation (SCV here).
     mean = np.mean(values)
     disp = np.var(values)
     scv = np.sqrt(disp)

@@ -33,7 +33,7 @@ if __name__ == "__main__":
         mode_rule = int(input("Select mode:"))
         if mode_rule == 1:
             # Normal errors + linear trend
-            norm_errors = generate_norm_error(m, sigma, n)
+            norm_errors = generate_norm_error(n, m, sigma)
             mean_err, disp_err, scv_err = calculate_statistics(norm_errors)
             print("----------------------- STATISTICS (Normal Errors) -----------------------")
             display_statistics(mean_err, disp_err, scv_err)
@@ -57,7 +57,7 @@ if __name__ == "__main__":
 
         elif mode_rule == 2:
             # Normal errors + quadratic trend
-            norm_errors = generate_norm_error(m, sigma, n)
+            norm_errors = generate_norm_error(n, m, sigma)
             print("----------------------- STATISTICS (Normal Errors) -----------------------")
             mean_err, disp_err, scv_err = calculate_statistics(norm_errors)
             display_statistics(mean_err, disp_err, scv_err)

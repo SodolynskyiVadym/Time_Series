@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def generate_norm_error(m, sigma, n):
+def generate_norm_error(n, m, sigma):
     # Generate n samples from a normal distribution with mean m and stddev sigma.
     return np.random.normal(m, sigma, n)
 

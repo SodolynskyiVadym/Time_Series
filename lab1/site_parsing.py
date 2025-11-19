@@ -1,3 +1,4 @@
+import json
 import requests
 from bs4 import BeautifulSoup as bs
 import pandas as pd
@@ -113,4 +114,3 @@ def fetch_usa_inflation_data_to_excel():
     df = pd.DataFrame(inflation_data, columns=["Year", "Inflation"])
     df.to_excel(f"{folder_path}/usa_inflation.xlsx")
     return
-
