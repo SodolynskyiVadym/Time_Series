@@ -1,0 +1,18 @@
+# pip install -r requirements.txt
+# pip freeze
+# pip uninstall -r requirements.txt
+# pip freeze >> requirements.txt
+
+
+matplotlib
+numpy
+packaging
+pandas
+scikit-learn
+statsmodels
+hurst
+seaborn
+requests
+bs4
+openpyxl
+xlrd
