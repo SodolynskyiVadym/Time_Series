@@ -72,3 +72,15 @@ def display_arrays_comparison(x1, y1, x2, y2, label1, label2, title, y_real = No
     plt.legend()
     plt.grid(True)
     plt.show()
+
+
+
+def display_three_arrays(y1, y2, y3, label1, label2, label3, title):
+    plt.figure()
+    plt.plot(y1, label=label1, linewidth=2)
+    plt.plot(y2, label=label2, linewidth=2)
+    plt.plot(y3, label=label3, linewidth=2)
+    plt.title(title)
+    plt.legend()
+    plt.grid(True)
+    plt.show()
